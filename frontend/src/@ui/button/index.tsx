@@ -14,8 +14,25 @@ const StyledButton = styled.button`
   }
 `;
 
-const ChildrenContainer = styled.span`
-  font-size: ${({ theme }) => theme.font.size.lg};
+const StyledFormButton = styled.button`
+  display: block;
+  padding: 16px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  overflow: hidden;
+  &:focus {
+    outline: none;
+  }
+`;
+
+const ChildrenContainer = styled.span<{ $size: "lg" | "md" | "sm" }>`
+  font-size: ${({ theme, $size }) =>
+    $size === "lg"
+      ? theme.font.size.lg
+      : $size === "md"
+      ? theme.font.size.md
+      : theme.font.size.sm};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   color: ${({ theme }) => theme.colors.textSec};
   ${StyledButton}:hover & {
@@ -43,9 +60,17 @@ const Underline = styled.div`
 export const Button: React.FC<{
   inverted?: boolean;
   onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-}> = ({ onClick, inverted, children }) => (
-  <StyledButton onClick={onClick}>
-    <ChildrenContainer>{children}</ChildrenContainer>
-    <Underline />
-  </StyledButton>
+}> = ({ inverted, children, onClick }) => {
+  return (
+    <StyledButton onClick={onClick}>
+      <ChildrenContainer $size="lg">{children}</ChildrenContainer>
+      <Underline />
+    </StyledButton>
+  );
+};
+
+export const FormButton: React.FC = ({ children }) => (
+  <StyledFormButton type="submit">
+    <ChildrenContainer $size="md">{children}</ChildrenContainer>
+  </StyledFormButton>
 );

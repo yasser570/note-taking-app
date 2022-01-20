@@ -6,8 +6,7 @@ const InputContainer = styled.div`
   padding: 16px;
   border: none;
   background: none;
-  /* cursor: pointer; */
-  height: 80px;
+  /* height: 80px; */
   overflow: hidden;
 `;
 
@@ -33,17 +32,17 @@ const Underline = styled.div`
 
 export const Input: React.FC<{
   placeholder: string;
-  onChange: (v: string) => void;
-  value: string;
-}> = ({ placeholder, value, onChange }) => {
+  name: string;
+  register: any;
+  type?: React.HTMLInputTypeAttribute;
+}> = ({ placeholder, register, name, type }) => {
   return (
     <InputContainer>
       <StyledInput
         placeholder={placeholder}
-        onChange={(e) => onChange(e.target.value)}
-        value={value}
+        type={type || "text"}
+        {...register(name, { required: true })}
       />
-
       <Underline />
     </InputContainer>
   );
