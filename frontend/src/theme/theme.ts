@@ -28,8 +28,8 @@ const myTheme: DefaultTheme = {
       h1: "64px",
       h2: "31px",
       lg: "34px",
-      md: "15px",
-      sm: "13px",
+      md: "17px",
+      sm: "14px",
     },
     weight: {
       bold: "700",

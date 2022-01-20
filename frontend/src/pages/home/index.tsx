@@ -1,6 +1,12 @@
 import React, { useState } from "react";
+import styled from "styled-components";
 import { NoteT } from "../note";
+import AddNote from "./addNote";
 import Notes from "./notes";
+
+const HeaderContainer = styled.div`
+  margin-bottom: 150px;
+`;
 
 const HomePage: React.FC = () => {
   const [notes] = useState<NoteT[]>([
@@ -86,7 +92,14 @@ const HomePage: React.FC = () => {
     },
   ]);
 
-  return <Notes notes={notes} />;
+  return (
+    <div>
+      <HeaderContainer>
+        <AddNote />
+        <Notes notes={notes} />
+      </HeaderContainer>
+    </div>
+  );
 };
 
 export default HomePage;
