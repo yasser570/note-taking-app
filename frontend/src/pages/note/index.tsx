@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Dialog, { DIALOG_TRANSITION_DURATION } from "../../@ui/dialog";
+import { useNoteLazyQuery } from "../../gql/generated/graphql";
 
 export type NoteT = {
   id: string;
@@ -15,15 +16,21 @@ const NotePage = () => {
 
   const [openDialog, setOpenDialog] = useState(false);
 
+  const [queryNote, { data, loading }] = useNoteLazyQuery();
+
+  useEffect(() => {
+    if (id) {
+      queryNote({
+        variables: {
+          id,
+        },
+      });
+    }
+  }, [id]);
+
   useEffect(() => {
     setOpenDialog(true);
   }, []);
-
-  let note = {
-    id: "qq77wq5wd5",
-    title: "my cute note",
-    body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum, similique quos! Deserunt, nemo ipsum rerum incidunt nulla provident optio temporibus?",
-  };
 
   function closeDialog() {
     setOpenDialog(false);
@@ -34,7 +41,8 @@ const NotePage = () => {
 
   return (
     <Dialog aria-labelledby="label" close={closeDialog} open={openDialog}>
-      {JSON.stringify(note)}
+      {loading && <span>loading</span>}
+      {data && JSON.stringify(data)}
     </Dialog>
   );
 };

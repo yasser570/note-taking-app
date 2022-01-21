@@ -53,7 +53,7 @@ export const resolvers = {
 
       const notes = await Note.createQueryBuilder("note")
         .leftJoinAndSelect("note.users", "un")
-        .where("un.userId === :userId", { userId: req.session.userId })
+        .where("un.userId = :userId", { userId: req.session.userId })
         .orderBy("note.updatedAt", "DESC")
         .getMany();
 
@@ -65,7 +65,7 @@ export const resolvers = {
       }
 
       const note = await Note.createQueryBuilder("note")
-        .where("note.id === :noteId", { noteId: id })
+        .where("note.id = :noteId", { noteId: id })
         .leftJoinAndSelect("note.users", "un")
         .getOne();
 
@@ -124,7 +124,10 @@ export const resolvers = {
         return YupError(err);
       }
 
-      const user = await User.findOne({ username: args.username });
+      const user = await User.findOne(
+        { username: args.username },
+        { select: ["id", "username", "password"] }
+      );
 
       if (!user) {
         throw new UserInputError("user is not found!", {
@@ -164,6 +167,8 @@ export const resolvers = {
         userId: req.session.userId,
         noteId: note.id,
       }).save();
+
+      console.log("note", note);
 
       return note;
     },

@@ -1,6 +1,5 @@
 fragment UserInfo on User {
   id
-  name
   username
 }
 
@@ -12,13 +11,13 @@ fragment NoteInfo on Note {
   updatedAt
 }
 
-query CurrentUserQuery {
+query CurrentUser {
   currentUser {
     ...UserInfo
   }
 }
 
-query NotesQuery {
+query Notes {
   notes {
     ...NoteInfo
   }
@@ -30,23 +29,19 @@ query Note($id: String!) {
   }
 }
 
-mutation SignUpMutation(
-  $email: String!
-  $username: String!
-  $password: String!
-) {
+mutation SignUp($email: String!, $username: String!, $password: String!) {
   signUp(email: $email, username: $username, password: $password) {
     ...UserInfo
   }
 }
 
-mutation LoginMutation($username: String!, $password: String!) {
+mutation Login($username: String!, $password: String!) {
   login(username: $username, password: $password) {
     ...UserInfo
   }
 }
 
-mutation AddNoteMutation($title: String!, $body: String!) {
+mutation AddNote($title: String!, $body: String!) {
   addNote(title: $title, body: $body) {
     ...NoteInfo
   }

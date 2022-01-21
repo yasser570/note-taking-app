@@ -2,8 +2,8 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import styled from "styled-components";
+import { Note } from "../../gql/generated/graphql";
 import { breakpoints } from "../../theme/media";
-import { NoteT } from "../note";
 
 const GridContainer = styled.ul`
   padding: 0;
@@ -40,13 +40,13 @@ const ContentContainer = styled.div`
   height: 240px;
 `;
 
-const Notes: React.FC<{ notes: NoteT[] }> = ({ notes }) => {
+const Notes: React.FC<{ notes: Note[] }> = ({ notes }) => {
   let location = useLocation();
 
   return (
     <GridContainer>
       {notes.map((n) => (
-        <GridItem>
+        <GridItem key={n.id}>
           <StyledLink
             to={`/note/${n.id}`}
             state={{ backgroundLocation: location }}

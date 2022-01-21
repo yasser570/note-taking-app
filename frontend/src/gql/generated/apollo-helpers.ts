@@ -19,10 +19,9 @@ export type QueryFieldPolicy = {
 	note?: FieldPolicy<any> | FieldReadFunction<any>,
 	notes?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type UserKeySpecifier = ('id' | 'name' | 'username' | UserKeySpecifier)[];
+export type UserKeySpecifier = ('id' | 'username' | UserKeySpecifier)[];
 export type UserFieldPolicy = {
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
-	name?: FieldPolicy<any> | FieldReadFunction<any>,
 	username?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type StrictTypedTypePolicies = {

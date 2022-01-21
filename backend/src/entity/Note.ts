@@ -1,17 +1,17 @@
 import {
-  PrimaryColumn,
   Entity,
   Column,
   BaseEntity,
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  PrimaryGeneratedColumn,
 } from "typeorm";
 import { UserNote } from "./UserNote";
 
 @Entity()
 export class Note extends BaseEntity {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column("varchar", { length: 255 })

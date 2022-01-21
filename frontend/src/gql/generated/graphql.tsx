@@ -66,23 +66,22 @@ export type QueryNoteArgs = {
 export type User = {
   __typename?: 'User';
   id: Scalars['String'];
-  name: Scalars['String'];
   username: Scalars['String'];
 };
 
-export type UserInfoFragment = { __typename?: 'User', id: string, name: string, username: string };
+export type UserInfoFragment = { __typename?: 'User', id: string, username: string };
 
 export type NoteInfoFragment = { __typename?: 'Note', id: string, title?: string | null | undefined, body?: string | null | undefined, createdAt: any, updatedAt: any };
 
-export type CurrentUserQueryQueryVariables = Exact<{ [key: string]: never; }>;
+export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CurrentUserQueryQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, name: string, username: string } | null | undefined };
+export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, username: string } | null | undefined };
 
-export type NotesQueryQueryVariables = Exact<{ [key: string]: never; }>;
+export type NotesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type NotesQueryQuery = { __typename?: 'Query', notes: Array<{ __typename?: 'Note', id: string, title?: string | null | undefined, body?: string | null | undefined, createdAt: any, updatedAt: any }> };
+export type NotesQuery = { __typename?: 'Query', notes: Array<{ __typename?: 'Note', id: string, title?: string | null | undefined, body?: string | null | undefined, createdAt: any, updatedAt: any }> };
 
 export type NoteQueryVariables = Exact<{
   id: Scalars['String'];
@@ -91,35 +90,34 @@ export type NoteQueryVariables = Exact<{
 
 export type NoteQuery = { __typename?: 'Query', note?: { __typename?: 'Note', id: string, title?: string | null | undefined, body?: string | null | undefined, createdAt: any, updatedAt: any } | null | undefined };
 
-export type SignUpMutationMutationVariables = Exact<{
+export type SignUpMutationVariables = Exact<{
   email: Scalars['String'];
   username: Scalars['String'];
   password: Scalars['String'];
 }>;
 
 
-export type SignUpMutationMutation = { __typename?: 'Mutation', signUp: { __typename?: 'User', id: string, name: string, username: string } };
+export type SignUpMutation = { __typename?: 'Mutation', signUp: { __typename?: 'User', id: string, username: string } };
 
-export type LoginMutationMutationVariables = Exact<{
+export type LoginMutationVariables = Exact<{
   username: Scalars['String'];
   password: Scalars['String'];
 }>;
 
 
-export type LoginMutationMutation = { __typename?: 'Mutation', login?: { __typename?: 'User', id: string, name: string, username: string } | null | undefined };
+export type LoginMutation = { __typename?: 'Mutation', login?: { __typename?: 'User', id: string, username: string } | null | undefined };
 
-export type AddNoteMutationMutationVariables = Exact<{
+export type AddNoteMutationVariables = Exact<{
   title: Scalars['String'];
   body: Scalars['String'];
 }>;
 
 
-export type AddNoteMutationMutation = { __typename?: 'Mutation', addNote?: { __typename?: 'Note', id: string, title?: string | null | undefined, body?: string | null | undefined, createdAt: any, updatedAt: any } | null | undefined };
+export type AddNoteMutation = { __typename?: 'Mutation', addNote?: { __typename?: 'Note', id: string, title?: string | null | undefined, body?: string | null | undefined, createdAt: any, updatedAt: any } | null | undefined };
 
 export const UserInfoFragmentDoc = gql`
     fragment UserInfo on User {
   id
-  name
   username
 }
     `;
@@ -132,8 +130,8 @@ export const NoteInfoFragmentDoc = gql`
   updatedAt
 }
     `;
-export const CurrentUserQueryDocument = gql`
-    query CurrentUserQuery {
+export const CurrentUserDocument = gql`
+    query CurrentUser {
   currentUser {
     ...UserInfo
   }
@@ -141,33 +139,33 @@ export const CurrentUserQueryDocument = gql`
     ${UserInfoFragmentDoc}`;
 
 /**
- * __useCurrentUserQueryQuery__
+ * __useCurrentUserQuery__
  *
- * To run a query within a React component, call `useCurrentUserQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useCurrentUserQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCurrentUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCurrentUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCurrentUserQueryQuery({
+ * const { data, loading, error } = useCurrentUserQuery({
  *   variables: {
  *   },
  * });
  */
-export function useCurrentUserQueryQuery(baseOptions?: Apollo.QueryHookOptions<CurrentUserQueryQuery, CurrentUserQueryQueryVariables>) {
+export function useCurrentUserQuery(baseOptions?: Apollo.QueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<CurrentUserQueryQuery, CurrentUserQueryQueryVariables>(CurrentUserQueryDocument, options);
+        return Apollo.useQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, options);
       }
-export function useCurrentUserQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CurrentUserQueryQuery, CurrentUserQueryQueryVariables>) {
+export function useCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<CurrentUserQueryQuery, CurrentUserQueryQueryVariables>(CurrentUserQueryDocument, options);
+          return Apollo.useLazyQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, options);
         }
-export type CurrentUserQueryQueryHookResult = ReturnType<typeof useCurrentUserQueryQuery>;
-export type CurrentUserQueryLazyQueryHookResult = ReturnType<typeof useCurrentUserQueryLazyQuery>;
-export type CurrentUserQueryQueryResult = Apollo.QueryResult<CurrentUserQueryQuery, CurrentUserQueryQueryVariables>;
-export const NotesQueryDocument = gql`
-    query NotesQuery {
+export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
+export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
+export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
+export const NotesDocument = gql`
+    query Notes {
   notes {
     ...NoteInfo
   }
@@ -175,31 +173,31 @@ export const NotesQueryDocument = gql`
     ${NoteInfoFragmentDoc}`;
 
 /**
- * __useNotesQueryQuery__
+ * __useNotesQuery__
  *
- * To run a query within a React component, call `useNotesQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useNotesQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useNotesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useNotesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useNotesQueryQuery({
+ * const { data, loading, error } = useNotesQuery({
  *   variables: {
  *   },
  * });
  */
-export function useNotesQueryQuery(baseOptions?: Apollo.QueryHookOptions<NotesQueryQuery, NotesQueryQueryVariables>) {
+export function useNotesQuery(baseOptions?: Apollo.QueryHookOptions<NotesQuery, NotesQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<NotesQueryQuery, NotesQueryQueryVariables>(NotesQueryDocument, options);
+        return Apollo.useQuery<NotesQuery, NotesQueryVariables>(NotesDocument, options);
       }
-export function useNotesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NotesQueryQuery, NotesQueryQueryVariables>) {
+export function useNotesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NotesQuery, NotesQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<NotesQueryQuery, NotesQueryQueryVariables>(NotesQueryDocument, options);
+          return Apollo.useLazyQuery<NotesQuery, NotesQueryVariables>(NotesDocument, options);
         }
-export type NotesQueryQueryHookResult = ReturnType<typeof useNotesQueryQuery>;
-export type NotesQueryLazyQueryHookResult = ReturnType<typeof useNotesQueryLazyQuery>;
-export type NotesQueryQueryResult = Apollo.QueryResult<NotesQueryQuery, NotesQueryQueryVariables>;
+export type NotesQueryHookResult = ReturnType<typeof useNotesQuery>;
+export type NotesLazyQueryHookResult = ReturnType<typeof useNotesLazyQuery>;
+export type NotesQueryResult = Apollo.QueryResult<NotesQuery, NotesQueryVariables>;
 export const NoteDocument = gql`
     query Note($id: String!) {
   note(id: $id) {
@@ -235,27 +233,27 @@ export function useNoteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NoteQ
 export type NoteQueryHookResult = ReturnType<typeof useNoteQuery>;
 export type NoteLazyQueryHookResult = ReturnType<typeof useNoteLazyQuery>;
 export type NoteQueryResult = Apollo.QueryResult<NoteQuery, NoteQueryVariables>;
-export const SignUpMutationDocument = gql`
-    mutation SignUpMutation($email: String!, $username: String!, $password: String!) {
+export const SignUpDocument = gql`
+    mutation SignUp($email: String!, $username: String!, $password: String!) {
   signUp(email: $email, username: $username, password: $password) {
     ...UserInfo
   }
 }
     ${UserInfoFragmentDoc}`;
-export type SignUpMutationMutationFn = Apollo.MutationFunction<SignUpMutationMutation, SignUpMutationMutationVariables>;
+export type SignUpMutationFn = Apollo.MutationFunction<SignUpMutation, SignUpMutationVariables>;
 
 /**
- * __useSignUpMutationMutation__
+ * __useSignUpMutation__
  *
- * To run a mutation, you first call `useSignUpMutationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSignUpMutationMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useSignUpMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSignUpMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [signUpMutationMutation, { data, loading, error }] = useSignUpMutationMutation({
+ * const [signUpMutation, { data, loading, error }] = useSignUpMutation({
  *   variables: {
  *      email: // value for 'email'
  *      username: // value for 'username'
@@ -263,78 +261,78 @@ export type SignUpMutationMutationFn = Apollo.MutationFunction<SignUpMutationMut
  *   },
  * });
  */
-export function useSignUpMutationMutation(baseOptions?: Apollo.MutationHookOptions<SignUpMutationMutation, SignUpMutationMutationVariables>) {
+export function useSignUpMutation(baseOptions?: Apollo.MutationHookOptions<SignUpMutation, SignUpMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SignUpMutationMutation, SignUpMutationMutationVariables>(SignUpMutationDocument, options);
+        return Apollo.useMutation<SignUpMutation, SignUpMutationVariables>(SignUpDocument, options);
       }
-export type SignUpMutationMutationHookResult = ReturnType<typeof useSignUpMutationMutation>;
-export type SignUpMutationMutationResult = Apollo.MutationResult<SignUpMutationMutation>;
-export type SignUpMutationMutationOptions = Apollo.BaseMutationOptions<SignUpMutationMutation, SignUpMutationMutationVariables>;
-export const LoginMutationDocument = gql`
-    mutation LoginMutation($username: String!, $password: String!) {
+export type SignUpMutationHookResult = ReturnType<typeof useSignUpMutation>;
+export type SignUpMutationResult = Apollo.MutationResult<SignUpMutation>;
+export type SignUpMutationOptions = Apollo.BaseMutationOptions<SignUpMutation, SignUpMutationVariables>;
+export const LoginDocument = gql`
+    mutation Login($username: String!, $password: String!) {
   login(username: $username, password: $password) {
     ...UserInfo
   }
 }
     ${UserInfoFragmentDoc}`;
-export type LoginMutationMutationFn = Apollo.MutationFunction<LoginMutationMutation, LoginMutationMutationVariables>;
+export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
 
 /**
- * __useLoginMutationMutation__
+ * __useLoginMutation__
  *
- * To run a mutation, you first call `useLoginMutationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLoginMutationMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [loginMutationMutation, { data, loading, error }] = useLoginMutationMutation({
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
  *   variables: {
  *      username: // value for 'username'
  *      password: // value for 'password'
  *   },
  * });
  */
-export function useLoginMutationMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutationMutation, LoginMutationMutationVariables>) {
+export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<LoginMutationMutation, LoginMutationMutationVariables>(LoginMutationDocument, options);
+        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
       }
-export type LoginMutationMutationHookResult = ReturnType<typeof useLoginMutationMutation>;
-export type LoginMutationMutationResult = Apollo.MutationResult<LoginMutationMutation>;
-export type LoginMutationMutationOptions = Apollo.BaseMutationOptions<LoginMutationMutation, LoginMutationMutationVariables>;
-export const AddNoteMutationDocument = gql`
-    mutation AddNoteMutation($title: String!, $body: String!) {
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const AddNoteDocument = gql`
+    mutation AddNote($title: String!, $body: String!) {
   addNote(title: $title, body: $body) {
     ...NoteInfo
   }
 }
     ${NoteInfoFragmentDoc}`;
-export type AddNoteMutationMutationFn = Apollo.MutationFunction<AddNoteMutationMutation, AddNoteMutationMutationVariables>;
+export type AddNoteMutationFn = Apollo.MutationFunction<AddNoteMutation, AddNoteMutationVariables>;
 
 /**
- * __useAddNoteMutationMutation__
+ * __useAddNoteMutation__
  *
- * To run a mutation, you first call `useAddNoteMutationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAddNoteMutationMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useAddNoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddNoteMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [addNoteMutationMutation, { data, loading, error }] = useAddNoteMutationMutation({
+ * const [addNoteMutation, { data, loading, error }] = useAddNoteMutation({
  *   variables: {
  *      title: // value for 'title'
  *      body: // value for 'body'
  *   },
  * });
  */
-export function useAddNoteMutationMutation(baseOptions?: Apollo.MutationHookOptions<AddNoteMutationMutation, AddNoteMutationMutationVariables>) {
+export function useAddNoteMutation(baseOptions?: Apollo.MutationHookOptions<AddNoteMutation, AddNoteMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<AddNoteMutationMutation, AddNoteMutationMutationVariables>(AddNoteMutationDocument, options);
+        return Apollo.useMutation<AddNoteMutation, AddNoteMutationVariables>(AddNoteDocument, options);
       }
-export type AddNoteMutationMutationHookResult = ReturnType<typeof useAddNoteMutationMutation>;
-export type AddNoteMutationMutationResult = Apollo.MutationResult<AddNoteMutationMutation>;
-export type AddNoteMutationMutationOptions = Apollo.BaseMutationOptions<AddNoteMutationMutation, AddNoteMutationMutationVariables>;
+export type AddNoteMutationHookResult = ReturnType<typeof useAddNoteMutation>;
+export type AddNoteMutationResult = Apollo.MutationResult<AddNoteMutation>;
+export type AddNoteMutationOptions = Apollo.BaseMutationOptions<AddNoteMutation, AddNoteMutationVariables>;

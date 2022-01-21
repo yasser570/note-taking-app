@@ -5,7 +5,7 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
   Unique,
 } from "typeorm";
 import { Note } from "./Note";
@@ -14,7 +14,7 @@ import { User } from "./User";
 @Entity()
 @Unique(["noteId", "userId"])
 export class UserNote extends BaseEntity {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Index()

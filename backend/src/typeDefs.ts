@@ -22,7 +22,6 @@ export const typeDefs = gql`
   }
   type User {
     id: String!
-    name: String!
     username: String!
   }
 `;
