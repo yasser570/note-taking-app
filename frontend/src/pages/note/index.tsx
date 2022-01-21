@@ -1,35 +1,80 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { FormButton } from "../../@ui/button";
 import Dialog, { DIALOG_TRANSITION_DURATION } from "../../@ui/dialog";
-import { useNoteLazyQuery } from "../../gql/generated/graphql";
+import {
+  Note,
+  UpdateNoteMutationVariables,
+  useNoteLazyQuery,
+  useUpdateNoteMutation,
+} from "../../gql/generated/graphql";
 
 const ContentContainer = styled.div`
-  padding: 10px;
-  height: 240px;
-  background-color: ${({ theme }) => theme.colors.transparent};
-  transition: ${({ theme }) => theme.transition};
+  /* padding: 10px; */
 `;
 
-const NoteTitle = styled.span`
+const NoteInput = styled.textarea`
   display: block;
-  font-size: ${({ theme }) => theme.font.size.md};
-  color: ${({ theme }) => theme.colors.textPri};
-  font-weight: ${({ theme }) => theme.font.weight.bold};
-  max-width: 100%;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  word-break: break-all;
-  white-space: pre-wrap;
+
+  resize: none;
+  outline: none;
+  width: 100%;
+  background: none;
+  border: none;
   margin-bottom: 12px;
+  font-size: ${({ theme }) => theme.font.size.md};
+
+  &:focus {
+    outline: none;
+  }
 `;
 
-const NoteBody = styled.span`
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  word-break: break-all;
-  white-space: pre-wrap;
+const TitleInput = styled.input`
+  display: block;
+
+  width: 100%;
+  background: none;
+  border: none;
+  margin-bottom: 12px;
+  font-size: ${({ theme }) => theme.font.size.md};
+  font-weight: ${({ theme }) => theme.font.weight.bold};
+
+  &:focus {
+    outline: none;
+  }
 `;
+
+const NoteContent = React.forwardRef<HTMLButtonElement, { note: Note }>(
+  ({ note }, ref) => {
+    const [updateNote] = useUpdateNoteMutation();
+
+    const { register, handleSubmit } = useForm<UpdateNoteMutationVariables>({
+      defaultValues: {
+        id: note.id,
+        title: note.title,
+        body: note.body,
+      },
+    });
+
+    const onSubmit: SubmitHandler<UpdateNoteMutationVariables> = (v) => {
+      updateNote({
+        variables: v,
+      });
+    };
+
+    return (
+      <ContentContainer>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <TitleInput placeholder="Note Title" {...register("title")} />
+          <NoteInput placeholder="Note..." rows={10} {...register("body")} />
+          <button type="submit" ref={ref} hidden={true}></button>
+        </form>
+      </ContentContainer>
+    );
+  }
+);
 
 const NotePage = () => {
   let navigate = useNavigate();
@@ -39,6 +84,8 @@ const NotePage = () => {
   const [openDialog, setOpenDialog] = useState(false);
 
   const [queryNote, { data, loading }] = useNoteLazyQuery();
+
+  const submitButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (id) {
@@ -56,6 +103,7 @@ const NotePage = () => {
 
   function closeDialog() {
     setOpenDialog(false);
+    submitButtonRef.current?.click();
     setTimeout(() => {
       navigate(-1);
     }, DIALOG_TRANSITION_DURATION);
@@ -64,12 +112,7 @@ const NotePage = () => {
   return (
     <Dialog aria-labelledby="label" close={closeDialog} open={openDialog}>
       {loading && <span>loading...</span>}
-      {data?.note && (
-        <ContentContainer>
-          <NoteTitle>{data.note.title}</NoteTitle>
-          <NoteBody>{data.note.body}</NoteBody>
-        </ContentContainer>
-      )}
+      {data?.note && <NoteContent ref={submitButtonRef} note={data.note} />}
     </Dialog>
   );
 };

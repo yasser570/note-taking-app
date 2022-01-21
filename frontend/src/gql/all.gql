@@ -46,3 +46,9 @@ mutation AddNote($title: String!, $body: String!) {
     ...NoteInfo
   }
 }
+
+mutation UpdateNote($id: String!, $title: String!, $body: String!) {
+  updateNote(id: $id, title: $title, body: $body) {
+    ...NoteInfo
+  }
+}

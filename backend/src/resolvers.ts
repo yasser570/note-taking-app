@@ -159,8 +159,8 @@ export const resolvers = {
       }
 
       const note = await Note.create({
-        title,
-        body,
+        title: title,
+        body: body,
       }).save();
 
       await UserNote.create({
@@ -168,9 +168,36 @@ export const resolvers = {
         noteId: note.id,
       }).save();
 
-      console.log("note", note);
-
       return note;
+    },
+    updateNote: async (
+      _: any,
+      { id, title, body }: { id: string; title: string; body: string },
+      { req }: Context
+    ) => {
+      if (!req.session.userId) {
+        throw new Error("not logged in");
+      }
+
+      const note = await Note.createQueryBuilder("note")
+        .where("note.id = :noteId", { noteId: id })
+        .leftJoinAndSelect("note.users", "un")
+        .getOne();
+
+      if (!note) {
+        throw new Error("not found");
+      }
+
+      if (!note.users.find((u) => u.userId === req.session.userId)) {
+        throw new Error("not authorized");
+      }
+
+      note.title = title;
+      note.body = body;
+
+      const updatedNote = await note.save();
+
+      return updatedNote;
     },
   },
 };

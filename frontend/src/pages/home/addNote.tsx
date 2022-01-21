@@ -53,20 +53,7 @@ const TitleInput = styled.input`
   border: none;
   margin-bottom: 12px;
   font-size: ${({ theme }) => theme.font.size.md};
-
-  &:focus {
-    outline: none;
-  }
-`;
-
-const SubmitInput = styled.input`
-  display: block;
-
-  width: 100%;
-  background: none;
-  border: none;
-  margin-bottom: 12px;
-  font-size: ${({ theme }) => theme.font.size.md};
+  font-weight: ${({ theme }) => theme.font.weight.bold};
 
   &:focus {
     outline: none;
@@ -103,7 +90,7 @@ const AddNote: React.FC<{ updateCache: (note: any) => void }> = ({
   };
 
   useOnClickOutside(containerRef, () => {
-    if (title.length === 0 || body.length === 0) {
+    if (title.length === 0 && body.length === 0) {
       setFocused(false);
     }
   });

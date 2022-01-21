@@ -21,12 +21,13 @@ export type Mutation = {
   addNote?: Maybe<Note>;
   login?: Maybe<User>;
   signUp: User;
+  updateNote?: Maybe<Note>;
 };
 
 
 export type MutationAddNoteArgs = {
-  body?: InputMaybe<Scalars['String']>;
-  title?: InputMaybe<Scalars['String']>;
+  body: Scalars['String'];
+  title: Scalars['String'];
 };
 
 
@@ -42,12 +43,19 @@ export type MutationSignUpArgs = {
   username: Scalars['String'];
 };
 
+
+export type MutationUpdateNoteArgs = {
+  body: Scalars['String'];
+  id: Scalars['String'];
+  title: Scalars['String'];
+};
+
 export type Note = {
   __typename?: 'Note';
-  body?: Maybe<Scalars['String']>;
+  body: Scalars['String'];
   createdAt: Scalars['DateTime'];
   id: Scalars['String'];
-  title?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
   updatedAt: Scalars['DateTime'];
 };
 
@@ -71,7 +79,7 @@ export type User = {
 
 export type UserInfoFragment = { __typename?: 'User', id: string, username: string };
 
-export type NoteInfoFragment = { __typename?: 'Note', id: string, title?: string | null | undefined, body?: string | null | undefined, createdAt: any, updatedAt: any };
+export type NoteInfoFragment = { __typename?: 'Note', id: string, title: string, body: string, createdAt: any, updatedAt: any };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -81,14 +89,14 @@ export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typenam
 export type NotesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type NotesQuery = { __typename?: 'Query', notes: Array<{ __typename?: 'Note', id: string, title?: string | null | undefined, body?: string | null | undefined, createdAt: any, updatedAt: any }> };
+export type NotesQuery = { __typename?: 'Query', notes: Array<{ __typename?: 'Note', id: string, title: string, body: string, createdAt: any, updatedAt: any }> };
 
 export type NoteQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
 
 
-export type NoteQuery = { __typename?: 'Query', note?: { __typename?: 'Note', id: string, title?: string | null | undefined, body?: string | null | undefined, createdAt: any, updatedAt: any } | null | undefined };
+export type NoteQuery = { __typename?: 'Query', note?: { __typename?: 'Note', id: string, title: string, body: string, createdAt: any, updatedAt: any } | null | undefined };
 
 export type SignUpMutationVariables = Exact<{
   email: Scalars['String'];
@@ -113,7 +121,16 @@ export type AddNoteMutationVariables = Exact<{
 }>;
 
 
-export type AddNoteMutation = { __typename?: 'Mutation', addNote?: { __typename?: 'Note', id: string, title?: string | null | undefined, body?: string | null | undefined, createdAt: any, updatedAt: any } | null | undefined };
+export type AddNoteMutation = { __typename?: 'Mutation', addNote?: { __typename?: 'Note', id: string, title: string, body: string, createdAt: any, updatedAt: any } | null | undefined };
+
+export type UpdateNoteMutationVariables = Exact<{
+  id: Scalars['String'];
+  title: Scalars['String'];
+  body: Scalars['String'];
+}>;
+
+
+export type UpdateNoteMutation = { __typename?: 'Mutation', updateNote?: { __typename?: 'Note', id: string, title: string, body: string, createdAt: any, updatedAt: any } | null | undefined };
 
 export const UserInfoFragmentDoc = gql`
     fragment UserInfo on User {
@@ -336,3 +353,38 @@ export function useAddNoteMutation(baseOptions?: Apollo.MutationHookOptions<AddN
 export type AddNoteMutationHookResult = ReturnType<typeof useAddNoteMutation>;
 export type AddNoteMutationResult = Apollo.MutationResult<AddNoteMutation>;
 export type AddNoteMutationOptions = Apollo.BaseMutationOptions<AddNoteMutation, AddNoteMutationVariables>;
+export const UpdateNoteDocument = gql`
+    mutation UpdateNote($id: String!, $title: String!, $body: String!) {
+  updateNote(id: $id, title: $title, body: $body) {
+    ...NoteInfo
+  }
+}
+    ${NoteInfoFragmentDoc}`;
+export type UpdateNoteMutationFn = Apollo.MutationFunction<UpdateNoteMutation, UpdateNoteMutationVariables>;
+
+/**
+ * __useUpdateNoteMutation__
+ *
+ * To run a mutation, you first call `useUpdateNoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateNoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateNoteMutation, { data, loading, error }] = useUpdateNoteMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      title: // value for 'title'
+ *      body: // value for 'body'
+ *   },
+ * });
+ */
+export function useUpdateNoteMutation(baseOptions?: Apollo.MutationHookOptions<UpdateNoteMutation, UpdateNoteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateNoteMutation, UpdateNoteMutationVariables>(UpdateNoteDocument, options);
+      }
+export type UpdateNoteMutationHookResult = ReturnType<typeof useUpdateNoteMutation>;
+export type UpdateNoteMutationResult = Apollo.MutationResult<UpdateNoteMutation>;
+export type UpdateNoteMutationOptions = Apollo.BaseMutationOptions<UpdateNoteMutation, UpdateNoteMutationVariables>;
