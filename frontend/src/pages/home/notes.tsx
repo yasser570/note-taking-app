@@ -27,6 +27,7 @@ const GridItem = styled.li`
   justify-self: stretch;
   align-self: stretch;
   overflow: hidden;
+  background-color: ${({ theme }) => theme.colors.bg2};
 `;
 
 const StyledLink = styled(Link)`
@@ -35,9 +36,38 @@ const StyledLink = styled(Link)`
 `;
 
 const ContentContainer = styled.div`
-  background-color: ${({ theme }) => theme.colors.bg2};
   padding: 10px;
   height: 240px;
+  background-color: ${({ theme }) => theme.colors.transparent};
+  transition: ${({ theme }) => theme.transition};
+  ${StyledLink}:hover & {
+    background-color: ${({ theme }) => theme.colors.hover};
+  }
+`;
+
+const NoteTitle = styled.span`
+  display: block;
+  font-size: ${({ theme }) => theme.font.size.md};
+  color: ${({ theme }) => theme.colors.textPri};
+  font-weight: ${({ theme }) => theme.font.weight.bold};
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-bottom: 12px;
+`;
+
+const NoteBody = styled.span`
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -ms-word-break: break-all;
+  word-break: break-all;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  white-space: pre-wrap;
 `;
 
 const Notes: React.FC<{ notes: Note[] }> = ({ notes }) => {
@@ -51,7 +81,10 @@ const Notes: React.FC<{ notes: Note[] }> = ({ notes }) => {
             to={`/note/${n.id}`}
             state={{ backgroundLocation: location }}
           >
-            <ContentContainer>{JSON.stringify(n)}</ContentContainer>
+            <ContentContainer>
+              <NoteTitle>{n.title}</NoteTitle>
+              <NoteBody>{n.body}</NoteBody>
+            </ContentContainer>
           </StyledLink>
         </GridItem>
       ))}

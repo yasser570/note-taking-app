@@ -14,9 +14,9 @@ const StyledButton = styled.button`
   }
 `;
 
-const StyledFormButton = styled.button`
+const StyledFormButton = styled.button<{ $ignorePadding?: boolean }>`
   display: block;
-  padding: 16px;
+  padding: ${({ $ignorePadding }) => ($ignorePadding ? "0" : "16px")};
   border: none;
   background: none;
   cursor: pointer;
@@ -69,8 +69,11 @@ export const Button: React.FC<{
   );
 };
 
-export const FormButton: React.FC = ({ children }) => (
-  <StyledFormButton type="submit">
+export const FormButton: React.FC<{ ignorePadding?: boolean }> = ({
+  children,
+  ignorePadding,
+}) => (
+  <StyledFormButton type="submit" $ignorePadding={ignorePadding}>
     <ChildrenContainer $size="md">{children}</ChildrenContainer>
   </StyledFormButton>
 );

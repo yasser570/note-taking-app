@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "../../@ui/button";
 import ImgUrl from "../../@imgs/emmanuel-ikwuegbu.jpg";
 import { breakpoints } from "../../theme/media";
+import { useCurrentUserQuery } from "../../gql/generated/graphql";
 
 const Container = styled.div`
   width: 100%;
@@ -46,6 +47,15 @@ const H1 = styled.h1`
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
   let location = useLocation();
+
+  const { data, loading } = useCurrentUserQuery();
+
+  useEffect(() => {
+    if (!loading && data?.currentUser) {
+      // logged in
+      navigate("/notes");
+    }
+  }, [data, loading, navigate]);
 
   return (
     <Container>

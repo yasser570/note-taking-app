@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import styled from "styled-components";
 import { useOnClickOutside } from "../../@hooks/useOnClickOutside";
+import { FormButton } from "../../@ui/button";
 import {
   AddNoteMutationVariables,
   useAddNoteMutation,
@@ -13,7 +14,7 @@ const Container = styled.div<{ $focused: boolean }>`
   padding: 30px;
   width: 60%;
   margin-bottom: 50px;
-  box-shadow: ${({ theme, $focused }) =>
+  box-shadow: ${({ $focused }) =>
     $focused
       ? "0 5px 20px 0px rgb(255 255 255 / 30%)"
       : "0 5px 20px 0px rgb(255 255 255 / 0%)"};
@@ -58,24 +59,54 @@ const TitleInput = styled.input`
   }
 `;
 
-const AddNote: React.FC = () => {
+const SubmitInput = styled.input`
+  display: block;
+
+  width: 100%;
+  background: none;
+  border: none;
+  margin-bottom: 12px;
+  font-size: ${({ theme }) => theme.font.size.md};
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+const AddNote: React.FC<{ updateCache: (note: any) => void }> = ({
+  updateCache,
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [focused, setFocused] = useState(false);
 
-  const { register, handleSubmit } = useForm<AddNoteMutationVariables>();
+  const { register, handleSubmit, watch, reset } =
+    useForm<AddNoteMutationVariables>();
 
   const [addNote] = useAddNoteMutation();
+
+  const { title, body } = watch();
 
   const onSubmit: SubmitHandler<AddNoteMutationVariables> = (variables) => {
     addNote({
       variables,
     })
-      .then(({ data }) => console.log(data))
+      .then(({ data }) => {
+        if (data?.addNote) {
+          updateCache(data.addNote);
+        }
+      })
       .catch((err) => console.log(err));
+
+    reset();
+    setFocused(false);
   };
 
-  useOnClickOutside(containerRef, () => setFocused(false));
+  useOnClickOutside(containerRef, () => {
+    if (title.length === 0 || body.length === 0) {
+      setFocused(false);
+    }
+  });
 
   return (
     <Container ref={containerRef} $focused={focused}>
@@ -93,7 +124,7 @@ const AddNote: React.FC = () => {
           rows={focused ? 4 : 1}
           {...register("body")}
         />
-        <input type="submit" />
+        {focused && <FormButton ignorePadding>Save</FormButton>}
       </form>
     </Container>
   );

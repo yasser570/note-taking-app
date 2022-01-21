@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, useLocation, Outlet } from "react-router-dom";
+import { Routes, Route, useLocation, Outlet, Link } from "react-router-dom";
 import HomePage from "./pages/home";
 import NotePage from "./pages/note";
 import NoMatch from "./pages/404";
@@ -23,9 +23,10 @@ const HeaderContainer = styled.div`
   align-items: center;
 `;
 
-const LogoContainer = styled.span`
+const LogoContainer = styled(Link)`
   font-size: ${({ theme }) => theme.font.size.lg};
   font-weight: ${({ theme }) => theme.font.weight.bold};
+  text-decoration: none;
   padding: 16px;
   display: block;
 `;
@@ -34,7 +35,7 @@ const Layout = () => {
   return (
     <LayoutContainer>
       <HeaderContainer>
-        <LogoContainer>:)</LogoContainer>
+        <LogoContainer to="/">:)</LogoContainer>
       </HeaderContainer>
       <Outlet />
     </LayoutContainer>
