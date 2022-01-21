@@ -81,7 +81,7 @@ export const resolvers = {
     },
   },
   Mutation: {
-    signup: async (
+    signUp: async (
       _: any,
       args: {
         username: string;

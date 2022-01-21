@@ -9,7 +9,7 @@ export const typeDefs = gql`
     note(id: String!): Note
   }
   type Mutation {
-    signup(email: String!, username: String!, password: String!): User!
+    signUp(email: String!, username: String!, password: String!): User!
     login(username: String!, password: String!): User
     addNote(title: String, body: String): Note
   }

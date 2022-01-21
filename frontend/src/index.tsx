@@ -7,15 +7,34 @@ import reportWebVitals from "./reportWebVitals";
 import { GlobalStyle } from "./theme/global";
 import { myTheme } from "./theme/theme";
 
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  HttpLink,
+} from "@apollo/client";
+
+const httpLink = new HttpLink({
+  uri: "http://localhost:4000/graphql",
+  credentials: "include",
+});
+
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: httpLink,
+});
+
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <ThemeProvider theme={myTheme}>
-        <GlobalStyle />
+    <ApolloProvider client={client}>
+      <BrowserRouter>
+        <ThemeProvider theme={myTheme}>
+          <GlobalStyle />
 
-        <App />
-      </ThemeProvider>
-    </BrowserRouter>
+          <App />
+        </ThemeProvider>
+      </BrowserRouter>
+    </ApolloProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

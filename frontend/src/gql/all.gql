@@ -1,0 +1,53 @@
+fragment UserInfo on User {
+  id
+  name
+  username
+}
+
+fragment NoteInfo on Note {
+  id
+  title
+  body
+  createdAt
+  updatedAt
+}
+
+query CurrentUserQuery {
+  currentUser {
+    ...UserInfo
+  }
+}
+
+query NotesQuery {
+  notes {
+    ...NoteInfo
+  }
+}
+
+query Note($id: String!) {
+  note(id: $id) {
+    ...NoteInfo
+  }
+}
+
+mutation SignUpMutation(
+  $email: String!
+  $username: String!
+  $password: String!
+) {
+  signUp(email: $email, username: $username, password: $password) {
+    ...UserInfo
+  }
+}
+
+mutation LoginMutation($username: String!, $password: String!) {
+  login(username: $username, password: $password) {
+    ...UserInfo
+  }
+}
+
+mutation AddNoteMutation($title: String!, $body: String!) {
+  addNote(title: $title, body: $body) {
+    ...NoteInfo
+  }
+}
