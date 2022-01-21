@@ -20,6 +20,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   addNote?: Maybe<Note>;
   login?: Maybe<User>;
+  removeNote?: Maybe<Scalars['Boolean']>;
   signUp: User;
   updateNote?: Maybe<Note>;
 };
@@ -34,6 +35,11 @@ export type MutationAddNoteArgs = {
 export type MutationLoginArgs = {
   password: Scalars['String'];
   username: Scalars['String'];
+};
+
+
+export type MutationRemoveNoteArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -131,6 +137,13 @@ export type UpdateNoteMutationVariables = Exact<{
 
 
 export type UpdateNoteMutation = { __typename?: 'Mutation', updateNote?: { __typename?: 'Note', id: string, title: string, body: string, createdAt: any, updatedAt: any } | null | undefined };
+
+export type RemoveNoreMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type RemoveNoreMutation = { __typename?: 'Mutation', removeNote?: boolean | null | undefined };
 
 export const UserInfoFragmentDoc = gql`
     fragment UserInfo on User {
@@ -388,3 +401,34 @@ export function useUpdateNoteMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdateNoteMutationHookResult = ReturnType<typeof useUpdateNoteMutation>;
 export type UpdateNoteMutationResult = Apollo.MutationResult<UpdateNoteMutation>;
 export type UpdateNoteMutationOptions = Apollo.BaseMutationOptions<UpdateNoteMutation, UpdateNoteMutationVariables>;
+export const RemoveNoreDocument = gql`
+    mutation RemoveNore($id: String!) {
+  removeNote(id: $id)
+}
+    `;
+export type RemoveNoreMutationFn = Apollo.MutationFunction<RemoveNoreMutation, RemoveNoreMutationVariables>;
+
+/**
+ * __useRemoveNoreMutation__
+ *
+ * To run a mutation, you first call `useRemoveNoreMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveNoreMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeNoreMutation, { data, loading, error }] = useRemoveNoreMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRemoveNoreMutation(baseOptions?: Apollo.MutationHookOptions<RemoveNoreMutation, RemoveNoreMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveNoreMutation, RemoveNoreMutationVariables>(RemoveNoreDocument, options);
+      }
+export type RemoveNoreMutationHookResult = ReturnType<typeof useRemoveNoreMutation>;
+export type RemoveNoreMutationResult = Apollo.MutationResult<RemoveNoreMutation>;
+export type RemoveNoreMutationOptions = Apollo.BaseMutationOptions<RemoveNoreMutation, RemoveNoreMutationVariables>;

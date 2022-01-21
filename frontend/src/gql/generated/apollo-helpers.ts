@@ -1,8 +1,9 @@
 import { FieldPolicy, FieldReadFunction, TypePolicies, TypePolicy } from '@apollo/client/cache';
-export type MutationKeySpecifier = ('addNote' | 'login' | 'signUp' | 'updateNote' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('addNote' | 'login' | 'removeNote' | 'signUp' | 'updateNote' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	addNote?: FieldPolicy<any> | FieldReadFunction<any>,
 	login?: FieldPolicy<any> | FieldReadFunction<any>,
+	removeNote?: FieldPolicy<any> | FieldReadFunction<any>,
 	signUp?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateNote?: FieldPolicy<any> | FieldReadFunction<any>
 };

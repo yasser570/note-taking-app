@@ -199,5 +199,27 @@ export const resolvers = {
 
       return updatedNote;
     },
+    removeNote: async (_: any, { id }: { id: string }, { req }: Context) => {
+      if (!req.session.userId) {
+        throw new Error("not logged in");
+      }
+
+      const note = await Note.createQueryBuilder("note")
+        .where("note.id = :noteId", { noteId: id })
+        .leftJoinAndSelect("note.users", "un")
+        .getOne();
+
+      if (!note) {
+        throw new Error("not found");
+      }
+
+      if (!note.users.find((u) => u.userId === req.session.userId)) {
+        throw new Error("not authorized");
+      }
+
+      await note.remove();
+
+      return true;
+    },
   },
 };

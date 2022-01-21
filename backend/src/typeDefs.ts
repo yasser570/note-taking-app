@@ -13,6 +13,7 @@ export const typeDefs = gql`
     login(username: String!, password: String!): User
     addNote(title: String!, body: String!): Note
     updateNote(id: String!, title: String!, body: String!): Note
+    removeNote(id: String!): Boolean
   }
   type Note {
     id: String!

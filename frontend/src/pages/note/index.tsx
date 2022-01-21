@@ -2,12 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { FormButton } from "../../@ui/button";
+import { IconButton } from "../../@ui/button";
 import Dialog, { DIALOG_TRANSITION_DURATION } from "../../@ui/dialog";
 import {
   Note,
   UpdateNoteMutationVariables,
   useNoteLazyQuery,
+  useRemoveNoreMutation,
   useUpdateNoteMutation,
 } from "../../gql/generated/graphql";
 
@@ -46,35 +47,62 @@ const TitleInput = styled.input`
   }
 `;
 
-const NoteContent = React.forwardRef<HTMLButtonElement, { note: Note }>(
-  ({ note }, ref) => {
-    const [updateNote] = useUpdateNoteMutation();
+const SpaceBetween = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
 
-    const { register, handleSubmit } = useForm<UpdateNoteMutationVariables>({
-      defaultValues: {
-        id: note.id,
-        title: note.title,
-        body: note.body,
-      },
+const NoteContent = React.forwardRef<
+  HTMLButtonElement,
+  { note: Note; closeDialog: () => any }
+>(({ note, closeDialog }, ref) => {
+  const [updateNote] = useUpdateNoteMutation();
+
+  const [removeNote] = useRemoveNoreMutation();
+
+  const { register, handleSubmit } = useForm<UpdateNoteMutationVariables>({
+    defaultValues: {
+      id: note.id,
+      title: note.title,
+      body: note.body,
+    },
+  });
+
+  const onSubmit: SubmitHandler<UpdateNoteMutationVariables> = (v) => {
+    updateNote({
+      variables: v,
     });
+  };
 
-    const onSubmit: SubmitHandler<UpdateNoteMutationVariables> = (v) => {
-      updateNote({
-        variables: v,
-      });
-    };
+  const onRemove = () => {
+    removeNote({
+      variables: {
+        id: note.id,
+      },
+    })
+      .then(({ data }) => {
+        if (data?.removeNote) {
+          closeDialog();
+        }
+      })
+      .catch((err) => console.log("err", err));
+  };
 
-    return (
-      <ContentContainer>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <TitleInput placeholder="Note Title" {...register("title")} />
-          <NoteInput placeholder="Note..." rows={10} {...register("body")} />
+  return (
+    <ContentContainer>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <TitleInput placeholder="Note Title" {...register("title")} />
+        <NoteInput placeholder="Note..." rows={10} {...register("body")} />
+        <SpaceBetween>
           <button type="submit" ref={ref} hidden={true}></button>
-        </form>
-      </ContentContainer>
-    );
-  }
-);
+          <IconButton name="remove" onClick={onRemove} />
+        </SpaceBetween>
+      </form>
+    </ContentContainer>
+  );
+});
 
 const NotePage = () => {
   let navigate = useNavigate();
@@ -101,18 +129,24 @@ const NotePage = () => {
     setOpenDialog(true);
   }, []);
 
-  function closeDialog() {
+  const closeDialog = () => {
     setOpenDialog(false);
     submitButtonRef.current?.click();
     setTimeout(() => {
       navigate(-1);
     }, DIALOG_TRANSITION_DURATION);
-  }
+  };
 
   return (
     <Dialog aria-labelledby="label" close={closeDialog} open={openDialog}>
       {loading && <span>loading...</span>}
-      {data?.note && <NoteContent ref={submitButtonRef} note={data.note} />}
+      {data?.note && (
+        <NoteContent
+          ref={submitButtonRef}
+          closeDialog={closeDialog}
+          note={data.note}
+        />
+      )}
     </Dialog>
   );
 };

@@ -52,3 +52,7 @@ mutation UpdateNote($id: String!, $title: String!, $body: String!) {
     ...NoteInfo
   }
 }
+
+mutation RemoveNore($id: String!) {
+  removeNote(id: $id)
+}
