@@ -136,7 +136,12 @@ const SvgWithStrokeAsPrimaryColor = styled.svg`
   height: 20px;
 `;
 
-type IconNames = "remove";
+const SpanIcon = styled.span`
+  color: inherit;
+  width: 20px;
+  height: 20px;
+`;
+type IconNames = "remove" | "close";
 
 const icons = {
   remove: {
@@ -176,6 +181,9 @@ const icons = {
       </SvgWithStrokeAsPrimaryColor>
     ),
   },
+  close: {
+    Component: () => <SpanIcon>X</SpanIcon>,
+  },
 };
 
 export const IconButton: React.FC<{
@@ -185,7 +193,12 @@ export const IconButton: React.FC<{
   const Ic = icons[name].Component;
 
   return (
-    <StyledIconButton onClick={onClick}>
+    <StyledIconButton
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick(e);
+      }}
+    >
       <IconContainer>
         <Ic />
       </IconContainer>

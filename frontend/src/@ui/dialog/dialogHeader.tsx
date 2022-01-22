@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { IconButton } from "../button";
 
 export const Header = styled.div`
   margin-bottom: 20px;
@@ -9,17 +10,12 @@ export const Header = styled.div`
   justify-content: space-between;
 `;
 
-export const DialogHeader: React.FC<{ close: any }> = ({ children, close }) => (
+export const DialogHeader: React.FC<{ close: () => any }> = ({
+  children,
+  close,
+}) => (
   <Header>
     <span>{children}</span>
-
-    <button
-      onClick={(e) => {
-        e.stopPropagation();
-        close();
-      }}
-    >
-      X
-    </button>
+    <IconButton onClick={close} name="close" />
   </Header>
 );
