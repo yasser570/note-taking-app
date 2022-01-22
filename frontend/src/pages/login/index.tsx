@@ -7,6 +7,7 @@ import { DialogHeader } from "../../@ui/dialog/dialogHeader";
 import { Input } from "../../@ui/input";
 import {
   LoginMutationVariables,
+  useCurrentUserQuery,
   useLoginMutation,
 } from "../../gql/generated/graphql";
 
@@ -18,6 +19,15 @@ const LoginPage: React.FC = () => {
   const { register, handleSubmit } = useForm<LoginMutationVariables>();
 
   const [login, { loading }] = useLoginMutation();
+
+  const { data, refetch, loading: loading2 } = useCurrentUserQuery();
+
+  useEffect(() => {
+    if (!loading && data?.currentUser) {
+      // logged in
+      navigate("/notes");
+    }
+  }, [data, loading, navigate]);
 
   useEffect(() => {
     setOpenDialog(true);
@@ -35,7 +45,11 @@ const LoginPage: React.FC = () => {
       variables,
     })
       .then(({ data }) => {
-        console.log(data);
+        if (data?.login) {
+          refetch();
+        } else {
+          console.log("something went wrong");
+        }
       })
       .catch((err) => console.log(err));
   };
@@ -51,7 +65,7 @@ const LoginPage: React.FC = () => {
           name="password"
           type="password"
         />
-        <FormButton loading={loading}>Submit</FormButton>
+        <FormButton loading={loading || loading2}>Submit</FormButton>
       </form>
     </Dialog>
   );

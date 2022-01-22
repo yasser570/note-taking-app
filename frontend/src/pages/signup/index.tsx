@@ -8,6 +8,7 @@ import { Input } from "../../@ui/input";
 import {
   useSignUpMutation,
   SignUpMutationVariables,
+  useCurrentUserQuery,
 } from "../../gql/generated/graphql";
 
 const SignUpPage: React.FC = () => {
@@ -18,6 +19,15 @@ const SignUpPage: React.FC = () => {
   const [openDialog, setOpenDialog] = useState(false);
 
   const [signUp, { loading }] = useSignUpMutation();
+
+  const { data, refetch, loading: loading2 } = useCurrentUserQuery();
+
+  useEffect(() => {
+    if (!loading && data?.currentUser) {
+      // logged in
+      navigate("/notes");
+    }
+  }, [data, loading, navigate]);
 
   useEffect(() => {
     setOpenDialog(true);
@@ -37,7 +47,11 @@ const SignUpPage: React.FC = () => {
       variables,
     })
       .then(({ data }) => {
-        console.log(data);
+        if (data?.signUp) {
+          refetch();
+        } else {
+          console.log("something went wrong");
+        }
       })
       .catch((err) => console.log(err));
   };
@@ -59,7 +73,7 @@ const SignUpPage: React.FC = () => {
           name="password"
           type="password"
         />
-        <FormButton loading={loading}>Submit</FormButton>
+        <FormButton loading={loading || loading2}>Submit</FormButton>
       </form>
     </Dialog>
   );
