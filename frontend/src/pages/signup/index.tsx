@@ -17,7 +17,7 @@ const SignUpPage: React.FC = () => {
 
   const [openDialog, setOpenDialog] = useState(false);
 
-  const [signUp] = useSignUpMutation();
+  const [signUp, { loading }] = useSignUpMutation();
 
   useEffect(() => {
     setOpenDialog(true);
@@ -30,8 +30,10 @@ const SignUpPage: React.FC = () => {
     }, DIALOG_TRANSITION_DURATION);
   }
 
-  const onSubmit: SubmitHandler<SignUpMutationVariables> = (variables) => {
-    signUp({
+  const onSubmit: SubmitHandler<SignUpMutationVariables> = async (
+    variables
+  ) => {
+    await signUp({
       variables,
     })
       .then(({ data }) => {
@@ -57,7 +59,7 @@ const SignUpPage: React.FC = () => {
           name="password"
           type="password"
         />
-        <FormButton>Submit</FormButton>
+        <FormButton loading={loading}>Submit</FormButton>
       </form>
     </Dialog>
   );

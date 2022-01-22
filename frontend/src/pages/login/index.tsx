@@ -17,7 +17,7 @@ const LoginPage: React.FC = () => {
 
   const { register, handleSubmit } = useForm<LoginMutationVariables>();
 
-  const [login] = useLoginMutation();
+  const [login, { loading }] = useLoginMutation();
 
   useEffect(() => {
     setOpenDialog(true);
@@ -30,10 +30,8 @@ const LoginPage: React.FC = () => {
     }, DIALOG_TRANSITION_DURATION);
   }
 
-  const onSubmit: SubmitHandler<LoginMutationVariables> = (variables) => {
-    console.log("variables", variables);
-
-    login({
+  const onSubmit: SubmitHandler<LoginMutationVariables> = async (variables) => {
+    await login({
       variables,
     })
       .then(({ data }) => {
@@ -53,7 +51,7 @@ const LoginPage: React.FC = () => {
           name="password"
           type="password"
         />
-        <FormButton>Submit</FormButton>
+        <FormButton loading={loading}>Submit</FormButton>
       </form>
     </Dialog>
   );

@@ -70,12 +70,14 @@ const AddNote: React.FC<{ updateCache: (note: any) => void }> = ({
   const { register, handleSubmit, watch, reset } =
     useForm<AddNoteMutationVariables>();
 
-  const [addNote] = useAddNoteMutation();
+  const [addNote, { loading }] = useAddNoteMutation();
 
   const { title, body } = watch();
 
-  const onSubmit: SubmitHandler<AddNoteMutationVariables> = (variables) => {
-    addNote({
+  const onSubmit: SubmitHandler<AddNoteMutationVariables> = async (
+    variables
+  ) => {
+    await addNote({
       variables,
     })
       .then(({ data }) => {
@@ -111,7 +113,11 @@ const AddNote: React.FC<{ updateCache: (note: any) => void }> = ({
           rows={focused ? 4 : 1}
           {...register("body")}
         />
-        {focused && <FormButton ignorePadding>Save</FormButton>}
+        {focused && (
+          <FormButton ignorePadding loading={loading}>
+            Save
+          </FormButton>
+        )}
       </form>
     </Container>
   );

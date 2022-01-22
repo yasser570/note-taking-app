@@ -1,5 +1,27 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const spin = keyframes`
+from {
+  transform: rotate(0deg);
+}
+to {
+  /* 360 */
+  transform: rotate(360deg);
+}
+`;
+
+const Spinner = styled.div`
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  background-color: none;
+  border-radius: 50%;
+  border: 3px solid ${({ theme }) => theme.colors.textTer};
+  border-top: 3px solid ${({ theme }) => theme.colors.textPri};
+  animation: ${spin} 1s linear 0s infinite;
+  position: absolute;
+`;
 
 const StyledButton = styled.button`
   display: block;
@@ -14,13 +36,24 @@ const StyledButton = styled.button`
   }
 `;
 
-const StyledFormButton = styled.button<{ $ignorePadding?: boolean }>`
+const StyledFormButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+`;
+
+const StyledFormButton = styled.button<{
+  $ignorePadding?: boolean;
+  $hide: boolean;
+}>`
   display: block;
   padding: ${({ $ignorePadding }) => ($ignorePadding ? "0" : "16px")};
   border: none;
   background: none;
   cursor: pointer;
   overflow: hidden;
+  opacity: ${({ $hide }) => ($hide ? 0 : 1)};
   &:focus {
     outline: none;
   }
@@ -89,15 +122,22 @@ export const Button: React.FC<{
   );
 };
 
-export const FormButton: React.FC<{ ignorePadding?: boolean }> = ({
-  children,
-  ignorePadding,
-}) => (
-  <StyledFormButton type="submit" $ignorePadding={ignorePadding}>
-    <FormButtonChildrenContainer $size="md">
-      {children}
-    </FormButtonChildrenContainer>
-  </StyledFormButton>
+export const FormButton: React.FC<{
+  ignorePadding?: boolean;
+  loading: boolean;
+}> = ({ children, ignorePadding, loading }) => (
+  <StyledFormButtonContainer>
+    {loading && <Spinner />}
+    <StyledFormButton
+      type="submit"
+      $ignorePadding={ignorePadding}
+      $hide={loading}
+    >
+      <FormButtonChildrenContainer $size="md">
+        {children}
+      </FormButtonChildrenContainer>
+    </StyledFormButton>
+  </StyledFormButtonContainer>
 );
 
 // *********************
